@@ -5,8 +5,11 @@
     <meta http-equiv="X-UA-Compatible" content="chrome=1" />
     <meta name="description" content="Slate is a responsive theme for GitHub Pages" />
 
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
-    <link href='//fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
+    <script src="scripts/jquery-1.11.0.min.js"></script>
+
+    <link href="stylesheets/stylesheet.css" rel="stylesheet" type="text/css" media="screen">
+    <link href="stylesheets/lightbox.css" rel="stylesheet" type="text/css" media="screen">
+    <link href="//fonts.googleapis.com/css?family=Ubuntu+Mono" rel="stylesheet" type="text/css">
     <title>toddjames.io</title>
   </head>
 
@@ -14,15 +17,8 @@
     <!-- HEADER -->
     <div id="header_wrap" class="outer">
         <header class="inner">
-<!--          <a id="forkme_banner" href="repository_url}}">View on GitHub</a>-->
-
           <h1 id="project_title">toddjames<span class="pink">.io</span></h1>
           <h2 id="project_tagline"><span class="white">site.description</span><span class="pink"> = </span><span class="yellow">'a repository for the random projects I work on'</span></h2>
-<!--          <section id="downloads">
-            <a class="zip_download_link" href="#">Download this project as a .zip file</a>
-            <a class="tar_download_link" href="#">Download this project as a tar.gz file</a>
-          </section>
-          -->
         </header>
     </div>
 
@@ -32,6 +28,7 @@
         <h3>VMware: "No network adapters were detected."</h3>
         <h6>Posted January 19, 2014</h6>
         <p>I was trying to install VMware ESXi 5.5 on a VMware Workstation 10.0.1 virtual machine and received this error. Huh? I was puzzled. How could ESXi not have a driver for the virtual hardware of another VMware product?</p>
+        <a href="images/vmware-network-adapters.png" data-lightbox="vmware-network-adapters" data-title="VMware network adapter error"><img src="images/vmware-network-adapters_thumb.png"></a>
         <p>After my Google-fu yielded no results, I decided to try a bunch of different configurations in hopes that I could install ESXi. I finally figured out that with the default new VM configuration, everything worked fine! So what was different?</p>
         <p>Originally I had been choosing “Do not use a network connection” during the VM creation. As it turns out, ESXi will only detect a network adapter if it is selected here. It will not detect network adapters added after initial VM creation. After comparing network adapter configurations in the .vmx file of adapters that were added here and adapters that were added after initial VM creation, I discovered that there is one line missing from the config for network adapters after initial VM creation:</p>
         <code>ethernet0.virtualDev = "e1000"</code>
@@ -40,6 +37,7 @@
         <h3>Using a Raspberry Pi to Simulate Hosts on a Network</h3>
         <h6>Posted October 22, 2013</h6>
         <p>I am studying for my CCNA and building a small Cisco lab to help with this endeavor. I needed a way to simulate hosts on my network without spending a fortune on old computers and power, so I decided to finally put my <a href="http://www.raspberrypi.org/">Raspberry Pi</a> to use! Without further adieu:</p>
+        <a href="images/raspberry-pi-network.jpg" data-lightbox="raspberry-pi-network" data-title="Raspberry Pi client simulator"><img src="images/raspberry-pi-network_thumb.jpg"></a>
         <p>To simulate four hosts, here’s the hardware I used, excluding Ethernet cables:</p>
         <ul>
           <li>1 Raspberry Pi (model B)</li>
