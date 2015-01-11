@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Slate is a responsive theme for GitHub Pages" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+    <link href='//fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
+    <title>toddjames.io</title>
+  </head>
+
+  <body>
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+<!--          <a id="forkme_banner" href="repository_url}}">View on GitHub</a>-->
+
+          <h1 id="project_title">toddjames<span class="pink">.io</span></h1>
+          <h2 id="project_tagline"><span class="white">site.description</span><span class="pink"> = </span><span class="yellow">'a repository for the random projects I work on'</span></h2>
+<!--          <section id="downloads">
+            <a class="zip_download_link" href="#">Download this project as a .zip file</a>
+            <a class="tar_download_link" href="#">Download this project as a tar.gz file</a>
+          </section>
+          -->
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h3>VMware: "No network adapters were detected."</h3>
+        <h6>Posted January 19, 2014</h6>
+        <p>I was trying to install VMware ESXi 5.5 on a VMware Workstation 10.0.1 virtual machine and received this error. Huh? I was puzzled. How could ESXi not have a driver for the virtual hardware of another VMware product?</p>
+        <p>After my Google-fu yielded no results, I decided to try a bunch of different configurations in hopes that I could install ESXi. I finally figured out that with the default new VM configuration, everything worked fine! So what was different?</p>
+        <p>Originally I had been choosing “Do not use a network connection” during the VM creation. As it turns out, ESXi will only detect a network adapter if it is selected here. It will not detect network adapters added after initial VM creation. After comparing network adapter configurations in the .vmx file of adapters that were added here and adapters that were added after initial VM creation, I discovered that there is one line missing from the config for network adapters after initial VM creation:</p>
+        <code>ethernet0.virtualDev = "e1000"</code>
+        <p>Without this line, the guest OS does not know what type of NIC is installed. Adding that line in the .vmx file for any adapters that do not have it allows them to be recognized by the guest OS. I would go out on a limb and say this little bug affects more than just ESXi.</p>
+
+        <h3>Using a Raspberry Pi to Simulate Hosts on a Network</h3>
+        <h6>Posted October 22, 2013</h6>
+        <p>I am studying for my CCNA and building a small Cisco lab to help with this endeavor. I needed a way to simulate hosts on my network without spending a fortune on old computers and power, so I decided to finally put my <a href="http://www.raspberrypi.org/">Raspberry Pi</a> to use! Without further adieu:</p>
+        <p>To simulate four hosts, here’s the hardware I used, excluding Ethernet cables:</p>
+        <ul>
+          <li>1 Raspberry Pi (model B)</li>
+          <li>1 <a href="http://www.monoprice.com/Product?c_id=103&cp_id=10307&cs_id=1030702&p_id=5328">Powered USB Hub</a></li>
+          <li>4 USB to Ethernet Adapters</li>
+        </ul>
+        <p>A regular USB hub wouldn’t cut it, as the Pi doesn’t output enough power for all of those adapters, so I opted for a powered USB hub. I purchased four USB to Ethernet adapters on eBay and am working with the seller to get four that actually work (I’m up to three and I connected a defective one in the picture for the purpose of illustration). I excluded a link to the ones I purchased as you will probably have better luck finding your own (just check the <a href="http://elinux.org/RPi_USB_Ethernet_adapters">compatibility list</a>, first).</p>
+        <p>Once I was ready to start, I installed <a href="http://raspbian.org/">Raspbian</a> on the Pi. I used the Ethernet port (eth0) on the Pi to connect it to my home (non-lab) network so I could SSH into it.</p>
+        <p>I then set up some udev rules to ensure that the USB to Ethernet adapters would always receive the same interface name, regardless of the order they were loaded in. I did this by creating the file /etc/udev/rules.d/70-persistent-net.rules and putting the following lines into it, obviously using the real MAC addresses of my devices:</p>
+        <code>KERNEL=="eth*", ATTR{address}=="00:11:22:33:44:55", NAME="eth1"
+KERNEL=="eth*", ATTR{address}=="00:11:22:33:44:66", NAME="eth2"
+KERNEL=="eth*", ATTR{address}=="00:11:22:33:44:77", NAME="eth3"
+KERNEL=="eth*", ATTR{address}=="00:11:22:33:44:88", NAME="eth4"</code>
+        <p>There is only one other piece to this puzzle, and that is figuring out a way to set a default gateway for each device, rather than having Raspbian use a single gateway for all network devices. This part actually took me the longest to get worked out, but long story short, I used an article I found on <a href="http://kindlund.wordpress.com/2007/11/19/configuring-multiple-default-routes-in-linux/">another blog</a> almost verbatim (I just changed the addresses and device names). As of this writing, Raspbian (2013-09-25-wheezy) has all of the required tools and kernel modules listed by Darien pre-installed.</p>
+        <p>Rather than running those commands (and the opposites of those commands) each time I wanted to change the configuration of a “host” on my Pi, I opted to write a small Python script to do that for me. If I decide to clean it up and make it a little more user friendly, I will post it here, but for now it can break under too many conditions and I don’t want to leave anyone with their Raspberry Pi’s networking configuration in some kind of abnormal state.</p>
+
+        <h3>Windows Update Stuck at Downloading 0% Complete</h3>
+        <h6>Posted October 13, 2014</h6>
+        <p>I had the misfortune of a computer rebooting in the middle of downloading its initial batch of Windows Updates as I was setting it up. When trying to run Windows Update again, it was stuck with the following message:</p>
+        <blockquote>"Downloading 127 updates (0 KB total, 0% complete)"</blockquote>
+        <p>Thankfully, this is pretty simple to fix. Stop the Windows Update service, delete all of the files and folders in C:\Windows\SoftwareDistribution, restart the Windows Update service, and launch Windows Update again. Ta-da!</p>
+      </section>
+    </div>
+
+    <!-- FOOTER -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class='mono'>
+          <span class="white">site.copyright</span><span class="pink"> = </span><span class="yellow">'2015 Todd James'</span>
+          <br>
+          <span class="white">site.source_code</span><span class="pink"> = </span><span class="yellow">'<a href="https://github.com/toddjames/toddjames.github.io">https://github.com/toddjames/toddjames.github.io</a>'</span>
+        </p>
+      </footer>
+    </div>
+
+  </body>
+</html>
