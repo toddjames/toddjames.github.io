@@ -59,6 +59,51 @@ KERNEL=="eth*", ATTR{address}=="00:11:22:33:44:88", NAME="eth4"</code></pre>
         <p>I had the misfortune of a computer rebooting in the middle of downloading its initial batch of Windows Updates as I was setting it up. When trying to run Windows Update again, it was stuck with the following message:</p>
         <blockquote>"Downloading 127 updates (0 KB total, 0% complete)"</blockquote>
         <p>Thankfully, this is pretty simple to fix. Stop the Windows Update service, delete all of the files and folders in C:\Windows\SoftwareDistribution, restart the Windows Update service, and launch Windows Update again. Ta-da!</p>
+
+        <h3>OS X Sync Network Time Script</h3>
+        <h6>Posted November 12, 2012</h6>
+        <p>For a project I was working on, I needed to sync the time on hundreds MacBooks so they would join an Active Directory domain properly. I needed to find a way to script this, but after scouring the internet for solutions and various combinations of <i>ntpdate</i> or ntpd commands, nothing seemed to work with consistency.</p>
+        <p>With <i>ntpdate</i>, I kept getting errors complaining that the NTP socket is in use. As it turns out, you cannot use <i>ntpdate</i> to sync the network time if you have “Set time and date automatically” enabled in System Preferences. The solution? Disable it, sync the time, and re-enable it. Thankfully, we can do that all from the command line:</p>
+        <pre><code># systemsetup -setusingnetworktime off
+# ntpdate time.apple.com
+# systemsetup -setusingnetworktime on</code></pre>
+
+        <h3>Clean Windows 7 OEM Installation</h3>
+        <h6>Posted January 4, 2012</h6>
+        <p>Here’s the situation: you’re “the computer guy” to your family or friends. They just got a new computer and ask you to get it in good working order before they start using it. You power it on to find trials of Norton and Office and 30 other programs that can only be considered bloatware. You’d like to perform a clean installation but keep their license. Here’s how:</p>
+        <ol>
+          <li>Backup your old activation files with <a href="http://directedge.us/content/abr-activation-backup-and-restore">ABR (Activation Backup & Restore)</a>.</li>
+          <li>Use <a href="http://code.kliu.org/misc/winisoutils/">this ei.cfg Removal Utility</a> to remove ei.cfg from your Windows 7 ISO.</li>
+          <li>Burn the ISO to a disc.</li>
+          <li>Install Windows 7 from the disc. When prompted for the edition, choose the same edition that was pre-installed on the computer before.</li>
+          <li>When prompted for a product key, do not enter one, just click Next. Uncheck the box to activate Windows automatically, as well.</li>
+          <li>Continue with your Windows installation as per usual.</li>
+          <li>Restore the license with ABR as soon as Windows is installed.</li>
+        </ol>
+        <p>If these steps don’t work for you, there is a <a href="http://forum.notebookreview.com/hp-compaq/120228-clean-vista-install-no-activation.html">more detailed guide</a> by the creator of ABR that you can check out. Essentially, you’re just migrating your license files from the old installation to a clean installation on the same computer.</p>
+
+        <h3>Storing IP Addresses in MySQL</h3>
+        <h6>Posted December 17, 2011</h6>
+        <p>While storing IPv4 addresses as strings as MySQL may seem like the obvious solution, there’s a better one: storing them as long integers. Specifically, you will want to make your IP address field an unsigned bigint.</p>
+        <p>To convert IP addresses to long for database storage in PHP, there is a convenient function: <a href="http://php.net/ip2long">ip2long()</a>. Going back to an IP address after pulling it from your database is just as easy: <a href="http://php.net/long2ip">long2ip()</a>.</p>
+
+        <h3>Creating a MySQL User with --skip-grant-tables</h3>
+        <h6>Posted December 17, 2011</h6>
+        <p>A friend of mine lets me use his box for almost anything I want and made me a sudoer. Today, I needed to create a MySQL user for myself without knowing any of his passwords. Here’s how I did it:</p>
+        <pre><code>$ sudo service mysql stop
+$ sudo mysqld_safe --skip-grant-tables &
+$ mysql -u root
+> FLUSH PRIVILEGES;
+> CREATE USER '&lt;username&gt;'@'localhost' IDENTIFIED BY '&lt;password&gt;';
+> GRANT ALL PRIVILEGES ON *.* TO '&lt;username&gt;'@'localhost' WITH GRANT OPTION;
+> exit;
+$ sudo kill &lt;mysqld-pid&gt;
+$ sudo service mysql start</pre></code>
+        <p>Ta-da!</p>
+
+        <h3>Singleton MySQL Class for PHP</h3>
+        <h6>Posted December 11, 2011</h6>
+        <p><a href="http://www.micahcarrick.com/php5-mysql-database-class.html">This</a> seems to be a pretty flexible and well-coded MySQL class for PHP.</p>
       </section>
     </div>
 
