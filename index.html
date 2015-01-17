@@ -35,7 +35,7 @@
         <p>Without this line, the guest OS does not know what type of NIC is installed. Adding that line in the .vmx file for any adapters that do not have it allows them to be recognized by the guest OS. I would go out on a limb and say this little bug affects more than just ESXi.</p>
 
         <h3>Using a Raspberry Pi to Simulate Hosts on a Network</h3>
-        <h6>Posted October 22, 2014</h6>
+        <h6>Posted October 22, 2013</h6>
         <p>I am studying for my CCNA and building a small Cisco lab to help with this endeavor. I needed a way to simulate hosts on my network without spending a fortune on old computers and power, so I decided to finally put my <a href="http://www.raspberrypi.org/">Raspberry Pi</a> to use! Without further adieu:</p>
         <a href="images/raspberry-pi-network.jpg" data-lightbox="raspberry-pi-network" data-title="Raspberry Pi client simulator"><img src="images/raspberry-pi-network_thumb.jpg"></a>
         <p>To simulate four hosts, here’s the hardware I used, excluding Ethernet cables:</p>
@@ -55,7 +55,7 @@ KERNEL=="eth*", ATTR{address}=="00:11:22:33:44:88", NAME="eth4"</code></pre>
         <p>Rather than running those commands (and the opposites of those commands) each time I wanted to change the configuration of a “host” on my Pi, I opted to write a small Python script to do that for me. If I decide to clean it up and make it a little more user friendly, I will post it here, but for now it can break under too many conditions and I don’t want to leave anyone with their Raspberry Pi’s networking configuration in some kind of abnormal state.</p>
 
         <h3>Windows Update Stuck at Downloading 0% Complete</h3>
-        <h6>Posted October 13, 2014</h6>
+        <h6>Posted October 13, 2013</h6>
         <p>I had the misfortune of a computer rebooting in the middle of downloading its initial batch of Windows Updates as I was setting it up. When trying to run Windows Update again, it was stuck with the following message:</p>
         <blockquote>"Downloading 127 updates (0 KB total, 0% complete)"</blockquote>
         <p>Thankfully, this is pretty simple to fix. Stop the Windows Update service, delete all of the files and folders in C:\Windows\SoftwareDistribution, restart the Windows Update service, and launch Windows Update again. Ta-da!</p>
