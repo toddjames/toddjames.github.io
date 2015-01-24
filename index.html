@@ -25,6 +25,15 @@
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
+        <h3>"Failed to build vmnet.  Failed to execute the build command."</h3>
+        <h6>Posted January 24, 2015</h6>
+        <p>This error seems to happen when VMware Workstation/Player tries to build the vmnet module for newer kernels (3.17+). The fix is pretty simple, and just involves modifying one line in the source. Run these commands as root to re-create the tarball with the modified source:</p>
+        <pre><code># mkdir -p /tmp/vmnet && cd /tmp/vmnet
+# tar -xf /usr/lib/vmware/modules/source/vmnet.tar
+# sed -i vmnet-only/netif.c -e 's/deviceName, VNetNetIfSetup/deviceName, NET_NAME_UNKNOWN, VNetNetIfSetup/'
+# tar -cf vmnet.tar vmnet-only
+# mv vmnet.tar /usr/lib/vmware/modules/source/</code></pre>
+
         <h3>VMware: "No network adapters were detected."</h3>
         <h6>Posted January 19, 2014</h6>
         <p>I was trying to install VMware ESXi 5.5 on a VMware Workstation 10.0.1 virtual machine and received this error. Huh? I was puzzled. How could ESXi not have a driver for the virtual hardware of another VMware product?</p>
